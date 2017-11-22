@@ -22,7 +22,7 @@ def user_login(user_id):
 def not_found(error):
     return make_response(jsonify({'error': 'Not found'}), 404)
 
-@app.route('/api/users/v1/users', methods=['POST'])
+@app.route('/api/auth/register', methods=['POST'])
 def user_registration():
     if not request.json or not 'name' in request.json:
         abort(400)
