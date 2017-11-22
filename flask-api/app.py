@@ -28,16 +28,16 @@ events = [
 ]
 
 @app.route('/todo/api/v1.0/events', methods=['GET'])
-@auth.login_required
 def get_events():
     return jsonify({'events': events})
 
 @app.route('/todo/api/v1.0/events/<int:event_id>', methods=['GET'])
+@auth.login_required
 def get_event(event_id):
-    event = [event for event in events if event['id'] == event_id]
-    if len(event) == 0:
+    for event in events:
+      	if event['id'] == event_id:
+    	    return jsonify({'event': event[0]})
         abort(404)
-    return jsonify({'event': event[0]})
 
 @app.errorhandler(404)
 def not_found(error):
