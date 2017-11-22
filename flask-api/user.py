@@ -11,12 +11,12 @@ users = users
 def get_users():
     return jsonify({'users': users})
 
-@app.route('/api/users/v1/users/<int:user_id>', methods=['GET'])
+@app.route('/api/auth/login/<int:user_id>', methods=['POST'])
 def user_login(user_id):
     for user in users:
       	if user['id'] == user_id:
     	    return jsonify({'users': users[0]})
-        abort(404)
+    abort(404)
 
 @app.errorhandler(404)
 def not_found(error):
@@ -34,6 +34,13 @@ def user_registration():
     }
     users.append(user)
     return jsonify({'users': users}), 201
+
+@app.route('/api/auth/login/<int:user_id>', methods=['POST'])
+def user_logout(user_id):
+    for user in users:
+      	if user['id'] == user_id:
+    	    return jsonify({'users': users})
+    abort(404)
 
 
 if __name__ == '__main__':
