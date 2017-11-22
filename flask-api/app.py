@@ -28,6 +28,7 @@ events = [
 ]
 
 @app.route('/todo/api/v1.0/events', methods=['GET'])
+@auth.login_required
 def get_events():
     return jsonify({'events': events})
 
