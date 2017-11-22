@@ -15,3 +15,6 @@ The platform is being developed from this designs
 * All the front-end development files are located with in the designs folder, so are the wireframes and the uml-class and wireframes of the respective pages
 
 You can also view the [UI](https://meshnesh.github.io/designs/ui/) here.
+
+### uml-class diagram ###
+![Alt Uml-diagram](https://github.com/meshnesh/Bright-Events/blob/develop/designs/uml_diagram/Bright%20Events.png)
