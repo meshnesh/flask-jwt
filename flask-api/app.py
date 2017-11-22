@@ -21,7 +21,7 @@ def get_event(event_id):
     for event in events:
       	if event['id'] == event_id:
     	    return jsonify({'event': event[0]})
-        abort(404)
+    abort(404)
 
 @app.errorhandler(404)
 def not_found(error):

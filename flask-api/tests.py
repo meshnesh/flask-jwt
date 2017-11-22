@@ -1,7 +1,7 @@
 import requests, unittest
 
-from .data import events
-from .file import app
+from data import events
+from app import app
 class TestEvents(unittest.TestCase):
   def setUp(self):
     app.run(debug=True)
