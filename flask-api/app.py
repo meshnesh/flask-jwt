@@ -11,11 +11,11 @@ auth = HTTPBasicAuth()
 events = events
 
 
-@app.route('/todo/api/v1.0/events', methods=['GET'])
+@app.route('/api/events/v1/events', methods=['GET'])
 def get_events():
     return jsonify({'events': events})
 
-@app.route('/todo/api/v1.0/events/<int:event_id>', methods=['GET'])
+@app.route('/api/v1/events/<int:event_id>', methods=['GET'])
 @auth.login_required
 def get_event(event_id):
     for event in events:
@@ -27,7 +27,7 @@ def get_event(event_id):
 def not_found(error):
     return make_response(jsonify({'error': 'Not found'}), 404)
 
-@app.route('/todo/api/v1.0/events', methods=['POST'])
+@app.route('/api/v1/events', methods=['POST'])
 def create_event():
     if not request.json or not 'title' in request.json:
         abort(400)
@@ -43,7 +43,7 @@ def create_event():
     events.append(event)
     return jsonify({'event': event}), 201
 
-@app.route('/todo/api/v1.0/events/<int:event_id>', methods=['PUT'])
+@app.route('/api/v1/events/<int:event_id>', methods=['PUT'])
 def update_event(event_id):
     for event in events:
         if event['id'] == event_id and request.json:
@@ -57,7 +57,7 @@ def update_event(event_id):
       
         abort(404)
 
-@app.route('/todo/api/v1.0/events/<int:event_id>', methods=['DELETE'])
+@app.route('/api/v1/events/<int:event_id>', methods=['DELETE'])
 def delete_event(event_id):
     for event in events:
         if event['id'] == event_id:
