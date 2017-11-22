@@ -1,7 +1,10 @@
 #!flask/bin/python
 from flask import Flask, jsonify, abort, make_response, request, url_for
+from flask_httpauth import HTTPBasicAuth
 
 app = Flask(__name__)
+
+auth = HTTPBasicAuth()
 
 events = [
     {
@@ -83,6 +86,16 @@ def delete_event(event_id):
         abort(404)
     events.remove(event[0])
     return jsonify({'result': True})
+
+@auth.get_password
+def get_password(username):
+    if username == 'miguel':
+        return 'python'
+    return None
+
+@auth.error_handler
+def unauthorized():
+    return make_response(jsonify({'error': 'Unauthorized access'}), 401)
 
 if __name__ == '__main__':
     app.run(debug=True)
