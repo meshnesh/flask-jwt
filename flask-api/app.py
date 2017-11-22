@@ -76,5 +76,13 @@ def update_event(event_id):
     event[0]['done'] = request.json.get('done', event[0]['done'])
     return jsonify({'event': event[0]})
 
+@app.route('/todo/api/v1.0/events/<int:event_id>', methods=['DELETE'])
+def delete_event(event_id):
+    event = [event for event in events if event['id'] == event_id]
+    if len(event) == 0:
+        abort(404)
+    events.remove(event[0])
+    return jsonify({'result': True})
+
 if __name__ == '__main__':
     app.run(debug=True)
