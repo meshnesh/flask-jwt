@@ -55,5 +55,26 @@ def create_event():
     events.append(event)
     return jsonify({'event': event}), 201
 
+@app.route('/todo/api/v1.0/events/<int:event_id>', methods=['PUT'])
+def update_event(event_id):
+    event = [event for event in events if event['id'] == event_id]
+    if len(event) == 0:
+        abort(404)
+    if not request.json:
+        abort(400)
+    if 'title' in request.json and type(request.json['title']) != unicode:
+        abort(400)
+    if 'description' in request.json and type(request.json['description']) is not unicode:
+        abort(400)
+    if 'done' in request.json and type(request.json['done']) is not bool:
+        abort(400)
+    event[0]['title'] = request.json.get('title', event[0]['title'])
+    event[0]['location'] = request.json.get('location', event[0]['location'])
+    event[0]['time'] = request.json.get('time', event[0]['time'])
+    event[0]['date'] = request.json.get('date', event[0]['date'])
+    event[0]['description'] = request.json.get('description', event[0]['description'])
+    event[0]['done'] = request.json.get('done', event[0]['done'])
+    return jsonify({'event': event[0]})
+
 if __name__ == '__main__':
     app.run(debug=True)
