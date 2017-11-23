@@ -1,4 +1,6 @@
-flask-api/flask
-.vscode
+.idea
 .DS_Store
+.vscode
+flask-api/flask
 *.pyc
+
