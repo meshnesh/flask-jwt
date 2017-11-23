@@ -1,0 +1,6 @@
+{
+  "tests.py": true, 
+  "tests.py::TestEvents": true, 
+  "tests.py::TestEvents::test_create_event": true, 
+  "tests.py::TestEvents::test_update_event": true
+}

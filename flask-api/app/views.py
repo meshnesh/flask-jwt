@@ -8,7 +8,7 @@ app = Flask(__name__)
 
 auth = HTTPBasicAuth()
 
-events = events = [
+events = [
     {
         'id': 1,
         'title': u'Mango Harvest',
