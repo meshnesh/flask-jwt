@@ -1,6 +1,9 @@
 .idea
 .DS_Store
 .vscode
-flask-api/flask
 *.pyc
-
+flask-api/flask
+flask-api/*.pyc
+flask-api/__pycache__/
+data/__pycache__/
+.cache/v/cache/
