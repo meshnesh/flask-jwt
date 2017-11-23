@@ -1,25 +1,5 @@
-# from __future__ import absolute_import
-# import unittest
-# from app import app
 
-# class TestEventsItem(unittest.TestCase):
-#     def setUp(self):
-#         self.app = app
-#         self.client = self.app.test_client
-#         self.new_event = {"id": "1"}
-
-#     def test_get_events(self):
-#          resp = self.client().get('/api/events', data=self.new_event)
-#          print(resp)
-#          self.assertEqual(resp.status_code, 201)
-#          resp = self.client().get('/api/events')
-#          self.assertIn('andela bootcamp', str(resp.data))
-
-
-# if __name__ == '__main__':
-#     unittest.main()
-
-import unittest
+import unittest, requests
 from flask import json
 
 from app.views import events, app
@@ -29,7 +9,7 @@ from app.views import events, app
 class TestEvents(unittest.TestCase):
     def setUp(self):
         self.req = app.test_client()
-        self.events = events[:]
+        self.events = events
 
     def tearDown(self):
         self.events.clear()
@@ -48,6 +28,8 @@ class TestEvents(unittest.TestCase):
         r = self.get_events()
         self.assertEqual(r.status_code, 200, 'Status Code not 200')
         body = json.loads(r.data)
+        print(("imported events", self.events))
+        print(("response events", body.get('events', [])))
         self.assertEqual(self.events, body.get('events', []), 'Events array not equal')
 
     def test_add_event(self):

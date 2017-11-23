@@ -1,13 +1,11 @@
 #!/bin/env python
 # -*- coding: utf-8 -*-
-
-# from app import event
+"""import depancies."""
+from flask import Flask, jsonify, abort, make_response, request, url_for
 
 app = Flask(__name__)
 
-auth = HTTPBasicAuth()
-
-events =[
+events = [
     {
         'id': 1,
         'title': u'Mango Harvest',
@@ -16,6 +14,18 @@ events =[
         'date':u'25 NOV 2017',
         'description': u'Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s,', 
         'done': False,
+        'rsvp': [
+            {
+            'user_id': 1,
+            'name': u'John Doe',
+            'email': u'john.D@gmail.com'
+            },
+            {
+            'user_id': 3,
+            'name': u'Antony Ng\'ang\'a',
+            'email': u'tonny.nesh@gmail.com'
+            }
+        ]
     },
     {
         'id': 2,
@@ -25,13 +35,20 @@ events =[
         'date':u'30 NOV 2017',
         'description': u'Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s,', 
         'done': False,
+        'rsvp': [
+            {
+            'user_id': 2,
+            'name': u'Mary Jane',
+            'email': u'jane.mary@yahoo.com'
+            }
+        ]
     }
 ]
 
 
 @app.route('/api/events', methods=['GET'])
 def get_events():
-    return jsonify({'event': events[0]})
+    return jsonify({'events': events})
 
 @app.route('/api/events/<int:event_id>', methods=['GET'])
 def get_event(event_id):
@@ -48,15 +65,16 @@ def not_found(error):
 @app.route('/api/events', methods=['POST'])
 def create_event():
     """Create new event."""
-    if not request.json or not 'title' in request.json:
+    data = request.get_json()
+    if not data or not 'title' in data:
         abort(400)
     event = {
         'id': events[-1]['id'] + 1,
-        'title': request.json['title'],
-        'location':request.json.get('location', ""),
-        'time':request.json.get('time', ""),
-        'date':request.json.get('date', ""),
-        'description': request.json.get('description', ""),
+        'title': data['title'],
+        'location':data.get('location', ""),
+        'time':data.get('time', ""),
+        'date':data.get('date', ""),
+        'description': data.get('description', ""),
         'done': False
     }
     events.append(event)
@@ -86,15 +104,6 @@ def delete_event(event_id):
         return jsonify({'result': True})
     abort(404)
 
-@auth.get_password
-def get_password(username):
-    if username == 'john':
-        return 'doe'
-    return None
-
-@auth.error_handler
-def unauthorized():
-    return make_response(jsonify({'error': 'Unauthorized access'}), 401)
-
+    
 if __name__ == '__main__':
     app.run(debug=True)

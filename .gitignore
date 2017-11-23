@@ -7,3 +7,4 @@ flask-api/*.pyc
 flask-api/__pycache__/
 data/__pycache__/
 .cache/v/cache/
+__pycache__/

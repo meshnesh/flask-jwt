@@ -1,8 +1,6 @@
 {
-  "tests.py::TestEvents::test_add_event": true, 
-  "tests.py::TestEvents::test_create_event": true, 
-  "tests.py::TestEvents::test_initial_events": true, 
-  "tests.py::TestEvents::test_update_event": true, 
-  "tests.py::TestEventsItem::test_get_events": true, 
-  "tests.py::TestEventsItem::test_retrieve_events": true
+  "tests.py::TestEvents::test_create_event": true,
+  "tests.py::TestEvents::test_update_event": true,
+  "tests.py::TestEventsItem::test_create_event": true,
+  "tests.py::TestEventsItem::test_get_events": true
 }
