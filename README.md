@@ -1,5 +1,5 @@
-# bright_events 
-(travis badge)[https://travis-ci.org/meshnesh/Bright-Events.svg?branch=develop]
+# Bright Events 
+![Alt travis_badge](https://travis-ci.org/meshnesh/Bright-Events.svg?branch=develop)
 
 
 An events platform where people create new events and share with others. One can see how many people are reserved to there event.
