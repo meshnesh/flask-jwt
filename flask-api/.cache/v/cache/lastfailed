@@ -1,6 +1,0 @@
-{
-  "tests.py::TestEvents::test_create_event": true,
-  "tests.py::TestEvents::test_update_event": true,
-  "tests.py::TestEventsItem::test_create_event": true,
-  "tests.py::TestEventsItem::test_get_events": true
-}
