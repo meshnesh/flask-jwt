@@ -4,8 +4,6 @@
 from flask import Flask, jsonify, abort, make_response, request, url_for
 from flask_httpauth import HTTPBasicAuth
 
-from data import events
-
 app = Flask(__name__)
 
 auth = HTTPBasicAuth()
