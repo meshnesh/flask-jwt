@@ -1,4 +1,5 @@
-# bright_events (travis badge)[https://travis-ci.org/meshnesh/Bright-Events.svg?branch=master]
+# bright_events 
+(travis badge)[https://travis-ci.org/meshnesh/Bright-Events.svg?branch=master]
 An events platform where people create new events and share with others. One can see how many people are reserved to there event.
 
 Events contain locations, time and day when it will happen, user can logging in and them to there list if they are available to attend.

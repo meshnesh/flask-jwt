@@ -2,7 +2,6 @@ language: python
 sudo: enabled
 python:
   - 3.6
-  - 2.7
 env:
   - FLASK=0.12  # recent Flask
 # command to install dependencies
