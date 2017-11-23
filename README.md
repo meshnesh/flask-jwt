@@ -21,3 +21,42 @@ You can also view the [UI](https://meshnesh.github.io/designs/ui/) here.
 
 ### uml-class diagram ###
 ![Alt Uml-diagram](https://github.com/meshnesh/Bright-Events/blob/develop/designs/uml_diagram/Bright%20Events.png)
+
+## To run the flask api  ##
+* clone the repo:
+
+ ``` git clone https://github.com/meshnesh/Bright-Events.git ```
+
+* change the directory to the project:
+
+``` cd Bright-Events ```
+
+Create a virtual enviroment and install all the dependacy modules, in to your machine
+
+* To create a virtual enviroment run
+
+    ``` virtualenv -p python3 myenv```
+
+* Activating the enviroment
+
+    ``` source venv/bin/activate```
+
+
+Install all dependancies for the project by running:
+
+``` sudo apt install pip```
+
+on your terminal run
+
+``` pip install -r requirements.txt ```
+
+#run 
+To test our project on your terminal run 
+
+``` export FLASK_APP=run.py```
+
+then
+
+``` flask run ```
+
+Open: [http://127.0.0.1:5000/api/events](http://127.0.0.1:5000/api/events)
