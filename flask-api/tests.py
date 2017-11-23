@@ -14,4 +14,4 @@ class TestEvents(unittest.TestCase):
       'http://localhost:{port}/todo/api/v1.0/events'.format(
       port=4000
     ))
-    self.assertCountEqual(events_res.json(), events, msg="Events be real")
+    self.assertEqual(events_res.json(), events, msg="Events be real")
