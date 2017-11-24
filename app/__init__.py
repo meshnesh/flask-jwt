@@ -1,6 +1,6 @@
 # app/__init__.py
 
-from flask import Flask, jsonify, abort, make_response, request, url_for
+from flask import Flask
 
 # Initialize the app
 app = Flask(__name__, instance_relative_config=True)

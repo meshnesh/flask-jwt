@@ -2,8 +2,7 @@
 # -*- coding: utf-8 -*-
 """import depancies."""
 from flask import Flask, jsonify, abort, make_response, request, url_for
-
-app = Flask(__name__)
+from app import app
 
 events = [
     {
@@ -103,7 +102,3 @@ def delete_event(event_id):
             events.remove(event[0])
         return jsonify({'result': True})
     abort(404)
-
-    
-if __name__ == '__main__':
-    app.run(debug=True)
