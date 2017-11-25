@@ -1,11 +1,25 @@
 #!flask/bin/python
 from flask import Flask, jsonify, abort, make_response, request, url_for
 
-from user_data import users
-
 app = Flask(__name__)
 
-users = users
+users = [
+    {
+        'user_id': 1,
+        'name': u'John Doe',
+        'email': u'john.D@gmail.com'
+    },
+    {
+        'user_id': 2,
+        'name': u'Mary Jane',
+        'email': u'jane.mary@yahoo.com'
+    },
+    {
+        'user_id': 3,
+        'name': u'Antony Ng\'ang\'a',
+        'email': u'tonny.nesh@gmail.com'
+    }
+]
 
 @app.route('/api/users/v1/users', methods=['GET'])
 def get_users():
