@@ -52,9 +52,6 @@ class EventConnectionTests(unittest.TestCase):
         self.resp = requests.get(self.url)
         self.assertEqual(self.resp.status_code, 200)
 
-    def test_user_register(self):
-        self.resp = requests.get(self.user_url)
-        self.assertEqual(self.resp.status_code, 200)
 
 
 if __name__ == "__main__":
