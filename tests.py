@@ -42,17 +42,6 @@ class TestEvents(unittest.TestCase):
 
 
 
-class EventConnectionTests(unittest.TestCase):
-    def setUp(self):
-        self.url = "http://127.0.0.1:5000/api/events"
-        self.user_url = "http://127.0.0.1:5000/api/users/v1/users"
-
-
-    def test_view_post(self):
-        self.resp = requests.get(self.url)
-        self.assertEqual(self.resp.status_code, 200)
-
-
 
 if __name__ == "__main__":
     unittest.main()
