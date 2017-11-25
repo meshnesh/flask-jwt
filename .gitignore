@@ -1,1 +1,8 @@
-flask-api/env
+.idea
+.DS_Store
+.vscode
+*.pyc
+flask/
+*.pyc
+__pycache__/
+.cache/
