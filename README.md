@@ -1,8 +1,5 @@
 # Bright Events 
-![Alt travis_badge](https://travis-ci.org/meshnesh/Bright-Events.svg?branch=develop)
-
-[![Coverage Status](https://coveralls.io/repos/github/meshnesh/Bright-Events/badge.svg?branch=master)](https://coveralls.io/github/meshnesh/Bright-Events?branch=master)
-
+[![Build Status](https://travis-ci.org/meshnesh/Bright-Events.svg?branch=api_development)](https://travis-ci.org/meshnesh/Bright-Events)  [![Coverage Status](https://coveralls.io/repos/github/meshnesh/Bright-Events/badge.svg?branch=api_development)](https://coveralls.io/github/meshnesh/Bright-Events?branch=api_development)  [![Codacy Badge](https://api.codacy.com/project/badge/Grade/6c62c8bed16a43df9890d9051244eeeb)](https://www.codacy.com/app/meshnesh/Bright-Events?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=meshnesh/Bright-Events&amp;utm_campaign=Badge_Grade)  [![Code Health](https://landscape.io/github/meshnesh/Bright-Events/api_development/landscape.svg?style=flat)](https://landscape.io/github/meshnesh/Bright-Events/api_development)
 
 An events platform where people create new events and share with others. One can see how many people are reserved to there event.
 
@@ -11,10 +8,10 @@ Events contain locations, time and day when it will happen, user can logging in 
 ### Wireframes Designs ###
 The platform is being developed from this designs
 
-![Alt homepage](https://github.com/meshnesh/Bright-Events/blob/develop/designs/wireframes/bright_events_homepage.png)
-![Alt sign-in](https://github.com/meshnesh/Bright-Events/blob/develop/designs/wireframes/SIGN%20IN.png)
-![Alt login](https://github.com/meshnesh/Bright-Events/blob/develop/designs/wireframes/Login.png)
-![Alt event details](https://github.com/meshnesh/Bright-Events/blob/develop/designs/wireframes/desktop_card_page.png)
+![Alt homepage](https://github.com/meshnesh/meshnesh.github.io/blob/master/designs/wireframes/bright_events_homepage.png)
+![Alt sign-in](https://github.com/meshnesh/meshnesh.github.io/blob/master/designs/wireframes/SIGN%20IN.png)
+![Alt login](https://github.com/meshnesh/meshnesh.github.io/blob/master/designs/wireframes/Login.png)
+![Alt event details](https://github.com/meshnesh/meshnesh.github.io/blob/master/designs/wireframes/desktop_card_page.png)
 
 ## UI Designs ##
 * All the front-end development files are located with in the designs folder, so are the wireframes and the uml-class and wireframes of the respective pages
@@ -52,7 +49,7 @@ on your terminal run
 
 ``` pip install -r requirements.txt ```
 
-#run 
+# run 
 To test our project on your terminal run 
 
 ``` export FLASK_APP=run.py```
@@ -62,3 +59,7 @@ then
 ``` flask run ```
 
 Open: [http://127.0.0.1:5000/api/events](http://127.0.0.1:5000/api/events)
+
+# Heroku App
+View the application on heroku:
+Open: [Bright Events](https://bright-events.herokuapp.com/api/events)
