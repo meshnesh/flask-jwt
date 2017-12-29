@@ -103,14 +103,15 @@ class Events(db.Model):
         db.session.commit()
 
     @staticmethod
-    def get_all(user_id):
+    def get_all_user(user_id):
         """This method gets all the events for a given user."""
         return Events.query.filter_by(created_by=user_id)
 
     @staticmethod
-    def get__created_events(user_id):
+    def get__all_events():
         """This method gets all the events for a given user."""
-        return Events.query.filter_by(created_by=user_id)
+        # return Events.query.filter_by(created_by=user_id)
+        return Events.query.all()
 
     def delete(self):
         db.session.delete(self)

@@ -63,7 +63,7 @@ def create_app(config_name):
                 else:
                     # GET
                     # get all the events for this user
-                    events = Events.get_all(user_id)
+                    events = Events.get_all_user(user_id)
                     results = []
 
                     for event in events:
@@ -86,9 +86,55 @@ def create_app(config_name):
                     'message': message
                 }
                 return make_response(jsonify(response)), 401
+    
+    @app.route('/eventlist/all/', methods=['GET'])
+    def get_event():
+        # GET
+        # get all the events for this user
+        events = Events.get__all_events()
+        results = []
+
+        for event in events:
+            obj = {
+                'id': event.id,
+                'title': event.title,
+                'location': event.location,
+                'time': event.time,
+                'date': event.date,
+                'description': event.description
+                # 'created_by': user_id
+            }
+            results.append(obj)
+
+        return make_response(jsonify(results)), 200
+    # # user is not legit, so the payload is an error message
+    # message = user_id
+    # response = {
+    #     'message': message
+    # }
+    # return make_response(jsonify(response)), 401
+
+    @app.route('/eventlist/all/<int:id>', methods=['GET'])
+    def get_single_event(id, **kwargs):
+        event = Events.query.filter_by(id=id).first()
+        if not event:
+            # Raise an HTTPException with a 404 not found status code
+            abort(404)
+        else:    
+            # GET
+            response = jsonify({
+                'id': event.id,
+                'title': event.title,
+                'location': event.location,
+                'time': event.time,
+                'date': event.date,
+                'description': event.description,
+                'created_by': event.created_by
+            })
+            return make_response(response), 200
 
     @app.route('/eventlist/<int:id>', methods=['GET', 'PUT', 'DELETE'])
-    def bucketlist_manipulation(id, **kwargs):
+    def event_manipulation(id, **kwargs):
 
         auth_header = request.headers.get('Authorization')
         access_token = auth_header.split(" ")[1]
