@@ -17,6 +17,7 @@ install:
 
 before_script:
   - createdb test_db
+  - source .env
 
 # command to run tests
 script: coverage run --source=app ./manage.py test
