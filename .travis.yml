@@ -2,14 +2,21 @@ language: python
 sudo: enabled
 python:
   - 3.6.1
+
+
 env:
   - FLASK=0.12  # recent Flask
+
+services:
+  - postgresql
+
 # command to install dependencies
 install:
   - pip install -r requirements.txt
+  - pip install coveralls --quiet
+
+before_script:
+  - createdb test_db
+
 # command to run tests
-script: nosetests tests/ --with-coverage --cover-package=app && coverage report
-
-after_success: coveralls
-    
-
+script: coverage run --source=app ./manage.py test
