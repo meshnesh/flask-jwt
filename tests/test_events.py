@@ -59,7 +59,7 @@ class EventTestCase(unittest.TestCase):
         self.assertEqual(res.status_code, 201)
         self.assertIn('Vacation', str(res.data))
 
-    def test_api_can_get_all_events(self):
+    def test_api_can_get_all_user_events(self):
         """Test API can get an event (GET request)."""
         self.register_user()
         result = self.login_user()
@@ -77,7 +77,24 @@ class EventTestCase(unittest.TestCase):
         self.assertEqual(res.status_code, 200)
         self.assertIn('Vacation', str(res.data))
 
-    def test_api_can_get_events_by_id(self):
+    def test_api_can_get_all_events(self):
+        """Test API can get an event (GET request)."""
+        self.register_user()
+        result = self.login_user()
+        access_token = json.loads(result.data.decode())['access_token']
+
+        res = self.client().post(
+            '/eventlist/',
+            headers=dict(Authorization="Bearer " + access_token),
+            data=self.event)
+        self.assertEqual(res.status_code, 201)
+        res = self.client().get(
+            '/eventlist/all/'
+        )
+        self.assertEqual(res.status_code, 200)
+        self.assertIn('Vacation', str(res.data))
+
+    def test_api_can_get_user_events_by_id(self):
         """Test API can get a single event by using it's id."""
         self.register_user()
         result = self.login_user()
@@ -92,6 +109,23 @@ class EventTestCase(unittest.TestCase):
         result = self.client().get(
             '/eventlist/{}'.format(results['id']),
             headers=dict(Authorization="Bearer " + access_token))
+        self.assertEqual(result.status_code, 200)
+        self.assertIn('Vacation', str(result.data))
+
+    def test_api_can_get_events_by_id(self):
+        """Test API can get a single event by using it's id."""
+        self.register_user()
+        result = self.login_user()
+        access_token = json.loads(result.data.decode())['access_token']
+
+        rv = self.client().post(
+            '/eventlist/',
+            headers=dict(Authorization="Bearer " + access_token),
+            data=self.event)
+        self.assertEqual(rv.status_code, 201)
+        results = json.loads(rv.data.decode())
+        result = self.client().get(
+            '/eventlist/all/{}'.format(results['id']))
         self.assertEqual(result.status_code, 200)
         self.assertIn('Vacation', str(result.data))
 
