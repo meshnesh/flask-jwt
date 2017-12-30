@@ -6,6 +6,11 @@ import jwt
 from datetime import datetime, timedelta
 from flask import current_app
 
+rsvps = db.Table('rsvps',
+                 db.Column('user_id', db.Integer, db.ForeignKey('users.id')),
+	                db.Column('event_id', db.Integer, db.ForeignKey('eventlists.id'))
+                )
+
 
 class User(db.Model):
     """This class defines the users table """
@@ -19,6 +24,8 @@ class User(db.Model):
     password = db.Column(db.String(256), nullable=False)
     eventlists = db.relationship(
         'Events', order_by='Events.id', cascade="all, delete-orphan")
+    myrsvps = db.relationship('Events', secondary=rsvps,
+                              backref=db.backref('rsvps', lazy='dynamic'), lazy='dynamic')
 
     def __init__(self, name, email, password):
         """Initialize the user with a name, an email and a password."""
@@ -57,9 +64,9 @@ class User(db.Model):
             )
             return jwt_string
 
-        except Exception as e:
+        except Exception as error:
             # return an error in string format if an exception occurs
-            return str(e)
+            return str(error)
 
     @staticmethod
     def decode_token(token):
@@ -101,6 +108,16 @@ class Events(db.Model):
     def save(self):
         db.session.add(self)
         db.session.commit()
+
+    def add_rsvp(self, user):
+        """ This method adds a user to the list of rsvps"""
+        if not self.has_rsvp(user):
+            self.rsvps.append(user)
+            db.session.add(self)
+    
+    def has_rsvp(self, user):
+        """This method checks if a user is already registered for an event"""
+        return self.rsvps.filter_by(id=user.id).first() is not None
 
     @staticmethod
     def get_all_user(user_id):
