@@ -46,7 +46,8 @@ def create_app(config_name):
                     description = str(request.data.get('description', ''))
                     if title:
                         event = Events(title=title, location=location,
-                                       time=time, date=date, description=description, created_by=user_id)
+                                       time=time, date=date,
+                                       description=description, created_by=user_id)
                         event.save()
                         response = jsonify({
                             'id': event.id,
@@ -86,11 +87,10 @@ def create_app(config_name):
                     'message': message
                 }
                 return make_response(jsonify(response)), 401
-    
+
     @app.route('/eventlist/all/', methods=['GET'])
     def get_event():
-        # GET
-        # get all the events for this user
+        # GET all the events for this user
         events = Events.get__all_events()
         results = []
 
@@ -102,17 +102,10 @@ def create_app(config_name):
                 'time': event.time,
                 'date': event.date,
                 'description': event.description
-                # 'created_by': user_id
             }
             results.append(obj)
 
         return make_response(jsonify(results)), 200
-    # # user is not legit, so the payload is an error message
-    # message = user_id
-    # response = {
-    #     'message': message
-    # }
-    # return make_response(jsonify(response)), 401
 
     @app.route('/eventlist/all/<int:id>', methods=['GET'])
     def get_single_event(id, **kwargs):
@@ -212,8 +205,14 @@ def create_app(config_name):
                     # POST
                     user = User.query.filter_by(id=user_id).first_or_404()
                     event.add_rsvp(user)
+                    # print(user)
 
-                    return "You have Reserved a seat", 201
+                    # rsvpMemebers = event.get__all_rsvp(user)
+                    # print(rsvpMemebers)
+                    response = {
+                        'message': 'You have Reserved a seat'
+                    }
+                    return make_response(jsonify(response)), 200
 
             else:
                 # user is not legit, so the payload is an error message

@@ -7,8 +7,6 @@ import jwt
 from datetime import datetime, timedelta
 from flask import current_app, Flask
 
-# app = Flask(__name__)
-# db = SQLAlchemy(app)
 
 rsvps = db.Table('rsvps',
     db.Column('user_id', db.Integer, db.ForeignKey('users.id')),
@@ -125,18 +123,28 @@ class Events(db.Model):
 
     def add_rsvp(self, user):
         # print(user)
-        """ This method adds a user to the list of rsvps"""       
+        """ This method adds a user to the list of rsvps""" 
+        # self.rsvpList.filter_by(id=user.id).first() is not None
+        # print(self.rsvpList)
+
+        for userList in self.rsvpList:
+            print(userList) 
+            # print(user.id)
+            pass
+            
         self.rsvpList.append(user)
         db.session.add(user)
-        print(user)
+        # print(user)
         db.session.commit()
-        for user in self.rsvpList:
-            print(user.name, "Has rsvp")
+        # for user in self.rsvpList:
+        #     print(user)
 
-    def get__all_rsvp(self):
+    def get__all_rsvp(self, user):
         """This method gets all the events for a given user."""
         # return Events.query.filter_by(created_by=user_id)
-        return self.rsvpList.all()
+        for user in self.rsvpList:
+            # print(user)
+            return user
 
     @staticmethod
     def get_all_user(user_id):
