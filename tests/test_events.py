@@ -94,7 +94,7 @@ class EventTestCase(unittest.TestCase):
         self.assertEqual(res.status_code, 200)
         self.assertIn('Vacation', str(res.data))
 
-    def test_api_can_get_user_events_by_id(self):
+    def test_api_can_get_user__single_event(self):
         """Test API can get a single event by using it's id."""
         self.register_user()
         result = self.login_user()
@@ -139,7 +139,7 @@ class EventTestCase(unittest.TestCase):
         rv = self.client().post(
             '/eventlist/',
             headers=dict(Authorization="Bearer " + access_token),
-            data={'title': 'Eat, pray and love'})
+            data=self.event)
         self.assertEqual(rv.status_code, 201)
         # get the json with the event
         results = json.loads(rv.data.decode())
@@ -195,7 +195,7 @@ class EventTestCase(unittest.TestCase):
         rv = self.client().post(
             '/eventlist/',
             headers=dict(Authorization="Bearer " + access_token),
-            data={'title': 'Blankets and Wine'})
+            data=self.event)
         self.assertEqual(rv.status_code, 201)
         # get the json with the event
         results = json.loads(rv.data.decode())
@@ -205,33 +205,6 @@ class EventTestCase(unittest.TestCase):
             '/eventlist/{}/rsvp/'.format(results['id']),
             headers=dict(Authorization="Bearer " + access_token))
         self.assertEqual(result.status_code, 200)
-
-    def test_user_has_rsvp(self):
-        """Test API User can RSVP to an existing event. (POST request)."""
-        #register the user and login
-        self.register_user()
-        result = self.login_user()
-        access_token = json.loads(result.data.decode())['access_token']
-
-        #let's create an event
-        rv = self.client().post(
-            '/eventlist/',
-            headers=dict(Authorization="Bearer " + access_token),
-            data={'title': 'Blankets and Wine'})
-        self.assertEqual(rv.status_code, 201)
-        # get the json with the event
-        results = json.loads(rv.data.decode())
-
-        # lets rsvp to the event now
-        rv = self.client().post(
-            '/eventlist/{}/rsvp/'.format(results['id']),
-            headers=dict(Authorization="Bearer " + access_token))
-
-        rv = self.client().post(
-            '/eventlist/{}/rsvp/'.format(results['id']),
-            headers=dict(Authorization="Bearer " + access_token))
-        self.assertEqual(result.status_code, 400)
-
 
     def tearDown(self):
         """teardown all initialized variables."""

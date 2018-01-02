@@ -206,7 +206,7 @@ def create_app(config_name):
                     response = {
                         'message': 'You have already reserved a seat'
                     }
-                    return make_response(jsonify(response)), 400
+                    return make_response(jsonify(response)), 202
 
                 response = {
                     'message': 'You have Reserved a seat'
