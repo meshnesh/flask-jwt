@@ -78,9 +78,49 @@ class LoginView(MethodView):
             # Return a server error using the HTTP Error Code 500 (Internal Server Error)
             return make_response(jsonify(response)), 500
 
+
+class RestPasswordView(MethodView):
+    """This class registers a new user."""
+
+    def put(self):
+        """Handle POST request for this view. Url ---> /auth/register"""
+
+        # Query to see if the user already exists
+        user = User.query.filter_by(email=request.data['email']).first()
+
+        if not user:
+            # There is no user so we'll tell them
+                response = {
+                    'message': 'Wrong Email or user account does not exist.'
+                }
+        else:
+            # There is an existing user.
+            try:
+                post_data = request.data
+                # Register the user
+                name = post_data['name']
+                email = post_data['email']
+                password = post_data['password']
+                user = User(name=name, email=email, password=password)
+                user.save()
+                return make_response(jsonify(response)), 201
+            except Exception as e:
+                # An error occured, therefore return a string message containing the error
+                response = {
+                    'message': str(e)
+                }
+                return make_response(jsonify(response)), 401
+
+            response = {
+                'message': 'User already exists. Please login.'
+            }
+
+            return make_response(jsonify(response)), 202
+
 # Define the API resource
 registration_view = RegistrationView.as_view('registration_view')
 login_view = LoginView.as_view('login_view')
+reset_password_view = RestPasswordView.as_view('rest_password_view')
 
 # Define the rule for the registration url --->  /auth/register
 # Then add the rule to the blueprint
@@ -95,4 +135,12 @@ auth_blueprint.add_url_rule(
     '/auth/login',
     view_func=login_view,
     methods=['POST']
+)
+
+# Define the rule for the rest_password url --->  /auth/rest-password
+# Then add the rule to the blueprint
+auth_blueprint.add_url_rule(
+    '/auth/reset-password',
+    view_func=reset_password_view,
+    methods=['PUT']
 )

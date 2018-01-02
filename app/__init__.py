@@ -3,7 +3,7 @@ import json
 from flask_api import FlaskAPI, status
 from flask_sqlalchemy import SQLAlchemy
 
-from flask import request, jsonify, abort, make_response
+from flask import request, jsonify, abort, make_response, flash
 
 # local import
 
@@ -193,6 +193,37 @@ def create_app(config_name):
                     'message': message
                 }
                 return make_response(jsonify(response)), 401
+
+
+    @app.route('/eventlist/<int:id>/rsvp/', methods=['POST'])
+    def create_rsvp(id, **kwargs):
+
+        auth_header = request.headers.get('Authorization')
+        access_token = auth_header.split(" ")[1]
+
+        if access_token:
+            user_id = User.decode_token(access_token)
+            if not isinstance(user_id, str):
+                event = Events.query.filter_by(id=id).first()
+                if not event:
+                    # Raise an HTTPException with a 404 not found status code
+                    abort(404)
+                else:
+                    # POST
+                    user = User.query.filter_by(id=user_id).first_or_404()
+                    event.add_rsvp(user)
+
+                    return "You have Reserved a seat", 201
+
+            else:
+                # user is not legit, so the payload is an error message
+                message = user_id
+                response = {
+                    'message': message
+                }
+                return make_response(jsonify(response)), 401
+
+
 
     # import the authentication blueprint and register it on the app
     from .auth import auth_blueprint

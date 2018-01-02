@@ -2,14 +2,18 @@
 
 from app import db
 from flask_bcrypt import Bcrypt
+from flask_sqlalchemy import SQLAlchemy
 import jwt
 from datetime import datetime, timedelta
-from flask import current_app
+from flask import current_app, Flask
+
+# app = Flask(__name__)
+# db = SQLAlchemy(app)
 
 rsvps = db.Table('rsvps',
-                 db.Column('user_id', db.Integer, db.ForeignKey('users.id')),
-	                db.Column('event_id', db.Integer, db.ForeignKey('eventlists.id'))
-                )
+    db.Column('user_id', db.Integer, db.ForeignKey('users.id')),
+    db.Column('event_id', db.Integer, db.ForeignKey('eventlists.id'))
+)
 
 
 class User(db.Model):
@@ -18,14 +22,14 @@ class User(db.Model):
     __tablename__ = 'users'
 
     # Define the columns of the users table, starting with the primary key
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(256), nullable=False, unique=True)
     email = db.Column(db.String(256), nullable=False, unique=True)
-    password = db.Column(db.String(256), nullable=False)
+    password = db.Column(db.String(256))
     eventlists = db.relationship(
         'Events', order_by='Events.id', cascade="all, delete-orphan")
     myrsvps = db.relationship('Events', secondary=rsvps,
-                              backref=db.backref('rsvps', lazy='dynamic'), lazy='dynamic')
+                              backref=db.backref('rsvpList', lazy='dynamic'), lazy='dynamic')
 
     def __init__(self, name, email, password):
         """Initialize the user with a name, an email and a password."""
@@ -39,6 +43,7 @@ class User(db.Model):
         """
         return Bcrypt().check_password_hash(self.password, password)
 
+
     def save(self):
         """Save a user to the database.
         This includes creating a new user and editing one.
@@ -46,13 +51,18 @@ class User(db.Model):
         db.session.add(self)
         db.session.commit()
 
+    @staticmethod
+    def get_all_users():
+        """This method gets all the events for a given user."""
+        return User.query.all()
+
     def generate_token(self, user_id):
         """ Generates the access token"""
 
         try:
             # set up a payload with an expiration time
             payload = {
-                'exp': datetime.utcnow() + timedelta(minutes=5),
+                'exp': datetime.utcnow() + timedelta(minutes=1440),
                 'iat': datetime.utcnow(),
                 'sub': user_id
             }
@@ -82,6 +92,10 @@ class User(db.Model):
             # the token is invalid, return an error string
             return "Invalid token. Please register or login"
 
+    def __str__(self):
+        return """User(id={}, name={}, email={}, events={})""".format(self.id, self.name, self.email, self.myrsvps.all())
+
+    __repr__ = __str__
 
 class Events(db.Model):
     """This class represents the eventlist table."""
@@ -110,14 +124,19 @@ class Events(db.Model):
         db.session.commit()
 
     def add_rsvp(self, user):
-        """ This method adds a user to the list of rsvps"""
-        if not self.has_rsvp(user):
-            self.rsvps.append(user)
-            db.session.add(self)
-    
-    def has_rsvp(self, user):
-        """This method checks if a user is already registered for an event"""
-        return self.rsvps.filter_by(id=user.id).first() is not None
+        # print(user)
+        """ This method adds a user to the list of rsvps"""       
+        self.rsvpList.append(user)
+        db.session.add(user)
+        print(user)
+        db.session.commit()
+        for user in self.rsvpList:
+            print(user.name, "Has rsvp")
+
+    def get__all_rsvp(self):
+        """This method gets all the events for a given user."""
+        # return Events.query.filter_by(created_by=user_id)
+        return self.rsvpList.all()
 
     @staticmethod
     def get_all_user(user_id):
@@ -134,6 +153,7 @@ class Events(db.Model):
         db.session.delete(self)
         db.session.commit()
 
-    def __repr__(self):
+    def __str__(self):
         return "<Events: {}>".format(self.title) # check on this later
 
+    __repr__ = __str__
