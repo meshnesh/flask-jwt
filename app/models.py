@@ -123,21 +123,14 @@ class Events(db.Model):
 
     def add_rsvp(self, user):
         # print(user)
-        """ This method adds a user to the list of rsvps""" 
-        # self.rsvpList.filter_by(id=user.id).first() is not None
-        # print(self.rsvpList)
-
-        for userList in self.rsvpList:
-            print(userList) 
-            # print(user.id)
-            pass
-            
+        """ This method adds a user to the list of rsvps"""
+        evt = user.myrsvps.filter_by(id=self.id).first()
+        if evt:
+            return True
         self.rsvpList.append(user)
         db.session.add(user)
-        # print(user)
         db.session.commit()
-        # for user in self.rsvpList:
-        #     print(user)
+        return False
 
     def get__all_rsvp(self, user):
         """This method gets all the events for a given user."""

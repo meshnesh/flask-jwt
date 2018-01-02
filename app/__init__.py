@@ -204,11 +204,13 @@ def create_app(config_name):
                 else:
                     # POST
                     user = User.query.filter_by(id=user_id).first_or_404()
-                    event.add_rsvp(user)
-                    # print(user)
+                    has_prev_rsvpd = event.add_rsvp(user)
+                    if has_prev_rsvpd:
+                        response = {
+                            'message': 'You have already reserved a seat'
+                        }
+                        return make_response(jsonify(response)), 200
 
-                    # rsvpMemebers = event.get__all_rsvp(user)
-                    # print(rsvpMemebers)
                     response = {
                         'message': 'You have Reserved a seat'
                     }
