@@ -103,25 +103,45 @@ class RestEmailView(MethodView):
         return make_response(jsonify(response)), 401
 
 class RestPasswordView(MethodView):
-    """This class resets a users password."""
+    """This class validates a user email the generates a token for resets a users password."""
 
     def put(self):
-        """Handle PUT request for this view. Url ---> /auth/register"""
+        """This Handles PUT request for handling the reset password for the user ---> /auth/reset-password"""
 
-        # Query to see if the user email exists
-        user = User.query.filter_by(email=request.data['email']).first()
-        if user:
-            access_token = user.generate_token(user.id)
-            if access_token:
-                response = {
-                    'message': 'Email confirmed you can reset your password.',
-                    'access_token': access_token.decode()
-                }
-                return make_response(jsonify(response)), 200
+        auth_header = request.headers.get('Authorization')
+        access_token = auth_header.split(" ")[1]
 
+        if access_token:
+            user_id = User.decode_token(access_token)
+            if not isinstance(user_id, str):
+                # get_user = User.get_all_users()
+                # print(get_user)
+                try:
+                    reset_password = User.query.filter_by(id=user_id).first_or_404()
+
+                    post_data = request.data
+                    name = reset_password.name
+                    email = reset_password.email
+                    password = post_data['password']
+                    user = User(name=name, email=email, password=password)
+                    user.save()
+
+                    response = {
+                        'message': 'Password rest successfully. Please log in.'
+                    }
+                    # return a response notifying the user that password was reset successfully
+                    return make_response(jsonify(response)), 201
+                except Exception as e:
+                    # An error occured, therefore return a string message containing the error
+                    response = {
+                        'message': str(e)
+                    }
+                    return make_response(jsonify(response)), 401
+        message = user_id
         response = {
-            'message': 'Wrong Email or user email does not exist.'
+            'message': message
         }
+        
         return make_response(jsonify(response)), 401
 
 
@@ -157,7 +177,7 @@ auth_blueprint.add_url_rule(
 # Define the rule for the rest_password url --->  /auth/rest-password
 # Then add the rule to the blueprint
 auth_blueprint.add_url_rule(
-    '/auth/reset-password',
+    '/auth/reset-password/',
     view_func=reset_password_view,
     methods=['PUT']
 )
