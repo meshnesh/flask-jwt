@@ -4,6 +4,7 @@ from flask.views import MethodView
 from flask import make_response, request, jsonify
 from app.models import User
 
+
 class RegistrationView(MethodView):
     """This class registers a new user."""
 
@@ -85,37 +86,22 @@ class RestPasswordView(MethodView):
     def put(self):
         """Handle PUT request for this view. Url ---> /auth/register"""
 
-        # Query to see if the user already exists
+        # Query to see if the user email exists
         user = User.query.filter_by(email=request.data['email']).first()
-        print(user.email)
-        # if not user:
-        #     # There is no user so we'll tell them
-        #         response = {
-        #             'message': 'Wrong Email or user account does not exist.'
-        #         }
-        # else:
-        #     # There is an existing user.
-        #     try:
-        #         post_data = request.data
-        #         # Register the user
-        #         name = post_data['name']
-        #         email = post_data['email']
-        #         password = post_data['password']
-        #         user = User(name=name, email=email, password=password)
-        #         user.save()
-        #         return make_response(jsonify(response)), 201
-        #     except Exception as e:
-        #         # An error occured, therefore return a string message containing the error
-        #         response = {
-        #             'message': str(e)
-        #         }
-        #         return make_response(jsonify(response)), 401
+        if user:
+            access_token = user.generate_token(user.id)
+            if access_token:
+                response = {
+                    'message': 'Email confirmed you can reset your password.',
+                    'access_token': access_token.decode()
+                }
+                return make_response(jsonify(response)), 200
 
-        #     response = {
-        #         'message': 'User already exists. Please login.'
-        #     }
+        response = {
+            'message': 'Wrong Email or user email does not exist.'
+        }
+        return make_response(jsonify(response)), 401
 
-        #     return make_response(jsonify(response)), 202
 
 # Define the API resource
 registration_view = RegistrationView.as_view('registration_view')
