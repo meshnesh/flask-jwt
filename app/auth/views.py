@@ -80,6 +80,28 @@ class LoginView(MethodView):
             return make_response(jsonify(response)), 500
 
 
+class RestEmailView(MethodView):
+    """This class resets a users password."""
+
+    def post(self):
+        """Handle PUT request for this view. Url ---> /auth/register"""
+
+        # Query to see if the user email exists
+        user = User.query.filter_by(email=request.data['email']).first()
+        if user:
+            access_token = user.generate_token(user.id)
+            if access_token:
+                response = {
+                    'message': 'Email confirmed you can reset your password.',
+                    'access_token': access_token.decode()
+                }
+                return make_response(jsonify(response)), 200
+
+        response = {
+            'message': 'Wrong Email or user email does not exist.'
+        }
+        return make_response(jsonify(response)), 401
+
 class RestPasswordView(MethodView):
     """This class resets a users password."""
 
@@ -106,6 +128,7 @@ class RestPasswordView(MethodView):
 # Define the API resource
 registration_view = RegistrationView.as_view('registration_view')
 login_view = LoginView.as_view('login_view')
+reset_view = RestEmailView.as_view('rest_view')
 reset_password_view = RestPasswordView.as_view('rest_password_view')
 
 # Define the rule for the registration url --->  /auth/register
@@ -120,6 +143,14 @@ auth_blueprint.add_url_rule(
 auth_blueprint.add_url_rule(
     '/auth/login',
     view_func=login_view,
+    methods=['POST']
+)
+
+# Define the rule for the rest(to validate the email) url --->  /auth/rest
+# Then add the rule to the blueprint
+auth_blueprint.add_url_rule(
+    '/auth/reset',
+    view_func=reset_view,
     methods=['POST']
 )
 
