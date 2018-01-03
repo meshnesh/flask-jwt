@@ -49,6 +49,12 @@ class User(db.Model):
         db.session.add(self)
         db.session.commit()
 
+    def resetPassword(self):
+        """Save a user to the database.
+        This includes creating a new user and editing one.
+        """
+        db.session.commit()
+
     @staticmethod
     def get_all_users():
         """This method gets all the events for a given user."""

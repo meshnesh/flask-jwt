@@ -3,6 +3,7 @@ from . import auth_blueprint
 from flask.views import MethodView
 from flask import make_response, request, jsonify
 from app.models import User
+from flask_bcrypt import Bcrypt
 
 
 class RegistrationView(MethodView):
@@ -106,7 +107,9 @@ class RestPasswordView(MethodView):
     """This class validates a user email the generates a token for resets a users password."""
 
     def put(self):
-        """This Handles PUT request for handling the reset password for the user ---> /auth/reset-password"""
+        """This Handles PUT request for handling the reset password for the user 
+        ---> /auth/reset-password
+        """
 
         auth_header = request.headers.get('Authorization')
         access_token = auth_header.split(" ")[1]
@@ -122,9 +125,9 @@ class RestPasswordView(MethodView):
                     post_data = request.data
                     name = reset_password.name
                     email = reset_password.email
-                    password = post_data['password']
-                    user = User(name=name, email=email, password=password)
-                    user.save()
+                    reset_password.password = Bcrypt().generate_password_hash(post_data['password']).decode()
+                    user = User(name=name, email=email, password=reset_password.password)
+                    user.resetPassword()
 
                     response = {
                         'message': 'Password rest successfully. Please log in.'
