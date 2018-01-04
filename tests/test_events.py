@@ -94,6 +94,105 @@ class EventTestCase(unittest.TestCase):
         self.assertEqual(res.status_code, 200)
         self.assertIn('Vacation', str(res.data))
 
+    def test_api_can_filter_event_title(self):
+        """Test API can filter an event by title (GET request)."""
+        self.register_user()
+        result = self.login_user()
+        access_token = json.loads(result.data.decode())['access_token']
+
+        res = self.client().post(
+            '/eventlist/',
+            headers=dict(Authorization="Bearer " + access_token),
+            data=self.event)
+        self.assertEqual(res.status_code, 201)
+        res = self.client().get(
+            '/eventlist/all?title=Vacation'
+        )
+        self.assertEqual(res.status_code, 200)
+        self.assertIn('Vacation', str(res.data))
+
+    def test_api_can_filter_event_location(self):
+        """Test API can filter an event by location (GET request)."""
+        self.register_user()
+        result = self.login_user()
+        access_token = json.loads(result.data.decode())['access_token']
+
+        res = self.client().post(
+            '/eventlist/',
+            headers=dict(Authorization="Bearer " + access_token),
+            data=self.event)
+        self.assertEqual(res.status_code, 201)
+        res = self.client().get(
+            '/eventlist/all?location=JKIA'
+        )
+        self.assertEqual(res.status_code, 200)
+        self.assertIn('JKIA', str(res.data))
+
+    def test_api_can_filter_event_location_title(self):
+        """Test API can filter an event by location and title (GET request)."""
+        self.register_user()
+        result = self.login_user()
+        access_token = json.loads(result.data.decode())['access_token']
+
+        res = self.client().post(
+            '/eventlist/',
+            headers=dict(Authorization="Bearer " + access_token),
+            data=self.event)
+        self.assertEqual(res.status_code, 201)
+        res = self.client().get(
+            '/eventlist/all?location=JKIA&title=Vacation'
+        )
+        self.assertEqual(res.status_code, 200)
+        self.assertIn('JKIA', str(res.data))
+
+    def test_api_can_filter_non_existing_event(self):
+        """Test API can filter an event title that doesn't exist (GET request)."""
+        self.register_user()
+        result = self.login_user()
+        access_token = json.loads(result.data.decode())['access_token']
+
+        res = self.client().post(
+            '/eventlist/',
+            headers=dict(Authorization="Bearer " + access_token),
+            data=self.event)
+        self.assertEqual(res.status_code, 201)
+        res = self.client().get(
+            '/eventlist/all?title=Hiking In Kenya'
+        )
+        self.assertEqual(res.status_code, 404)
+
+    def test_api_can_filter_non_existing_location(self):
+        """Test API can filter an event location that doesn't exist (GET request)."""
+        self.register_user()
+        result = self.login_user()
+        access_token = json.loads(result.data.decode())['access_token']
+
+        res = self.client().post(
+            '/eventlist/',
+            headers=dict(Authorization="Bearer " + access_token),
+            data=self.event)
+        self.assertEqual(res.status_code, 201)
+        res = self.client().get(
+            '/eventlist/all?location=Eldoret'
+        )
+        self.assertEqual(res.status_code, 404)
+
+    def test_filter_non_existing_location_title(self):
+        """Test API can filter an event location or name that doesn't exist (GET request)."""
+        self.register_user()
+        result = self.login_user()
+        access_token = json.loads(result.data.decode())['access_token']
+
+        res = self.client().post(
+            '/eventlist/',
+            headers=dict(Authorization="Bearer " + access_token),
+            data=self.event)
+        self.assertEqual(res.status_code, 201)
+        res = self.client().get(
+            '/eventlist/all?location=Eldoret&title=Vacation'
+        )
+        self.assertEqual(res.status_code, 404)
+
     def test_api_can_get_user__single_event(self):
         """Test API can get a single event by using it's id."""
         self.register_user()
