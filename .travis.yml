@@ -13,7 +13,6 @@ install:
   - pip install -r requirements.txt
 
 before_script:
-  - createdb bright_events
   - export SECRET="some-very-long-string-of-random-characters-CHANGE-TO-YOUR-LIKING"
   - export APP_SETTINGS="development"
   - export DATABASE_URL="postgresql://localhost/bright_events"
