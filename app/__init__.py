@@ -91,10 +91,28 @@ def create_app(config_name):
     @app.route('/eventlist/all/', methods=['GET'])
     def get_event():
         # GET all the events for this user
-        events = Events.get__all_events()
+        events = Events.query
+
+        title = request.args.get('title')
+        page = request.args.get('page', default=1, type=int)
+        limit = request.args.get('limit', default=10, type=int)
+        location = request.args.get('location')
+        # category = request.args.get('category')
+
+        if title:
+            events = Events.query.filter_by(title=title)
+
+        if location:
+            events = Events.query.filter_by(location=location)
+
+        # if category:
+        #     all_events = Event.query.filter_by(category=category)
+
+        eventPage = events.paginate(page, limit, False).items
+
         results = []
 
-        for event in events:
+        for event in eventPage:
             obj = {
                 'id': event.id,
                 'title': event.title,
@@ -105,9 +123,15 @@ def create_app(config_name):
             }
             results.append(obj)
 
+        if not results:
+            response = {
+                'message': "No events found"
+            }
+            return make_response(jsonify(response)), 404
+
         return make_response(jsonify(results)), 200
 
-    @app.route('/eventlist/all/<int:id>', methods=['GET'])
+    @app.route('/events/all/<int:id>', methods=['GET'])
     def get_single_event(id, **kwargs):
         event = Events.query.filter_by(id=id).first()
         if not event:
