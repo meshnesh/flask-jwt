@@ -95,14 +95,18 @@ def create_app(config_name):
 
         title = request.args.get('title')
         page = request.args.get('page', default=1, type=int)
-        limit = request.args.get('limit', default=2, type=int)
+        limit = request.args.get('limit', default=10, type=int)
         location = request.args.get('location')
+        args = {}
 
         if title:
-            events = Events.query.filter_by(title=title)
+            args.update(dict(title=title))
 
         if location:
-            events = Events.query.filter_by(location=location)
+            args.update(dict(location=location))
+
+        if args:
+            events = Events.query.filter_by(**args)
 
         eventPage = events.paginate(page, limit, False).items
 
