@@ -88,14 +88,14 @@ def create_app(config_name):
                 }
                 return make_response(jsonify(response)), 401
 
-    @app.route('/eventlist/all/', methods=['GET'])
+    @app.route('/eventlist/all', methods=['GET'])
     def get_event():
         # GET all the events for this user
         events = Events.query
 
         title = request.args.get('title')
         page = request.args.get('page', default=1, type=int)
-        limit = request.args.get('limit', default=10, type=int)
+        limit = request.args.get('limit', default=2, type=int)
         location = request.args.get('location')
         # category = request.args.get('category')
 
