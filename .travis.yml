@@ -16,7 +16,7 @@ before_script:
   - createdb test_events_db
 
 # command to run tests
-script: coverage run --source=app ./manage.py test
+script: nosetests tests/
 
 after_success: coveralls
 
