@@ -125,7 +125,7 @@ class EventTestCase(unittest.TestCase):
         self.assertEqual(rv.status_code, 201)
         results = json.loads(rv.data.decode())
         result = self.client().get(
-            '/eventlist/all/{}'.format(results['id']))
+            '/events/all/{}'.format(results['id']))
         self.assertEqual(result.status_code, 200)
         self.assertIn('Vacation', str(result.data))
 
