@@ -92,18 +92,17 @@ def create_app(config_name):
     def get_event():
         # GET all the events for this user
         events = Events.query
-
         title = request.args.get('title')
         page = request.args.get('page', default=1, type=int)
         limit = request.args.get('limit', default=10, type=int)
         location = request.args.get('location')
         args = {}
+        potential_search = ['title', 'location']
 
-        if title:
-            args.update(dict(title=title))
-
-        if location:
-            args.update(dict(location=location))
+        for search_res in potential_search:
+            var = request.args.get(search_res)
+            if var:
+                args.update({search_res:var})
 
         if args:
             events = Events.query.filter_by(**args)
