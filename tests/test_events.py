@@ -89,7 +89,7 @@ class EventTestCase(unittest.TestCase):
             data=self.event)
         self.assertEqual(res.status_code, 201)
         res = self.client().get(
-            '/eventlist/all/'
+            '/eventlist/all'
         )
         self.assertEqual(res.status_code, 200)
         self.assertIn('Vacation', str(res.data))

@@ -97,16 +97,12 @@ def create_app(config_name):
         page = request.args.get('page', default=1, type=int)
         limit = request.args.get('limit', default=2, type=int)
         location = request.args.get('location')
-        # category = request.args.get('category')
 
         if title:
             events = Events.query.filter_by(title=title)
 
         if location:
             events = Events.query.filter_by(location=location)
-
-        # if category:
-        #     all_events = Event.query.filter_by(category=category)
 
         eventPage = events.paginate(page, limit, False).items
 
