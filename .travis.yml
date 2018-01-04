@@ -16,10 +16,9 @@ before_script:
   - createdb test_events_db
 
 # command to run tests
-script: nosetests tests/
+script: nosetests --with-coverage --cover-package=tests && coverage report
 
 after_success: coveralls
-
 
 # language: python
 # python:
