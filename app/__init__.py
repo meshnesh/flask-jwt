@@ -3,7 +3,11 @@ import json
 from flask_api import FlaskAPI, status
 from flask_sqlalchemy import SQLAlchemy
 
-from flask import request, jsonify, abort, make_response, flash
+from flask import request, jsonify, abort, make_response, flash, Flask
+
+from flasgger import Swagger
+
+
 
 # local import
 
@@ -20,13 +24,57 @@ def create_app(config_name):
 
     from app.models import Events, User
 
-    app = FlaskAPI(__name__, instance_relative_config=True)
+    # app = FlaskAPI(__name__, instance_relative_config=True)
+    app = Flask(__name__)
     # overriding Werkzeugs built-in password hashing utilities using Bcrypt.
     bcrypt = Bcrypt(app)
 
     app.config.from_object(app_config[config_name])
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     db.init_app(app)
+
+    # app.config["SWAGGER"] = {
+    #     "title": "Swagger Basic Auth App",
+    #     "uiversion": 2,
+    # }
+    # swag = Swagger(
+    #     template={
+    #         "swagger": "2.0",
+    #         "info": {
+    #             "title": "Swagger Basic Auth App",
+    #             "version": "1.0",
+    #         },
+    #         "consumes": [
+    #             "application/json",
+    #         ],
+    #         "produces": [
+    #             "application/json",
+    #         ],
+    #     },
+    # )
+    # Swagger(app)
+
+
+    @app.route('/colors/<palette>/')
+    def colors(palette):
+        # """
+        # This example tests decorator package
+        # Should not break in Python 2.7+
+        # ---
+        # responses:
+        # 200:
+        #     description: Yeah it works
+        # """
+        all_colors = {
+            'cmyk': ['cian', 'magenta', 'yellow', 'black'],
+            'rgb': ['red', 'green', 'blue']
+        }
+        if palette == 'all':
+            result = all_colors
+        else:
+            result = {palette: all_colors.get(palette)}
+
+        return jsonify(result)
 
     @app.route('/eventlist/', methods=['POST', 'GET'])
     def event():

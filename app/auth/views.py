@@ -1,16 +1,31 @@
 from . import auth_blueprint
 
 from flask.views import MethodView
-from flask import make_response, request, jsonify
+from flask import make_response, request, jsonify, Flask
 from app.models import User
 from flask_bcrypt import Bcrypt
+
+from flasgger import Swagger
+
+# app = Flask(__name__)
+
+# Flasgger is initialized like a standard flask extension.
+# You can also use .init_app() with the "app factory" pattern.
+# swag = Swagger(app)
 
 
 class RegistrationView(MethodView):
     """This class registers a new user."""
 
     def post(self):
-        """Handle POST request for this view. Url ---> /auth/register"""
+        """
+        This example tests decorator package
+        Should not break in Python 2.7+
+        ---
+        responses:
+        200:
+            description: Yeah it works
+        """
 
         # Query to see if the user already exists
         user = User.query.filter_by(email=request.data['email']).first()
